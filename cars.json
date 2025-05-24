@@ -1,0 +1,112 @@
+[
+  {
+    "carModel": "Toyota Camry 2023",
+    "dailyRentalPrice": 50,
+    "availability": true,
+    "vehicleRegistrationNumber": "TOY-2023",
+    "features": ["GPS", "AC", "Bluetooth", "Keyless Entry"],
+    "description": "A sleek and fuel-efficient sedan with advanced safety features.",
+    "bookingCount": 5,
+    "imageUrl": "https://i.postimg.cc/wB10y58w/toyota.avif",
+    "location": "New York"
+  },
+  {
+    "carModel": "Tesla Model Y",
+    "dailyRentalPrice": 120,
+    "availability": true,
+    "vehicleRegistrationNumber": "TES-MY22",
+    "features": ["Autopilot", "Electric", "Panoramic Roof", "Premium Audio"],
+    "description": "A futuristic electric SUV with cutting-edge technology.",
+    "bookingCount": 12,
+    "imageUrl": "https://i.postimg.cc/TPBQryTf/black-mini-coupe-road-114579-5056.avif",
+    "location": "San Francisco"
+  },
+  {
+    "carModel": "Ford F-150",
+    "dailyRentalPrice": 85,
+    "availability": false,
+    "vehicleRegistrationNumber": "FRD-150X",
+    "features": ["4WD", "Towing Package", "Heated Seats", "Apple CarPlay"],
+    "description": "America’s best-selling pickup truck, built for power and utility.",
+    "bookingCount": 8,
+    "imageUrl": "https://i.postimg.cc/CL4vWLss/Ford-F-150.avif",
+    "location": "Texas"
+  },
+  {
+    "carModel": "BMW 5 Series",
+    "dailyRentalPrice": 110,
+    "availability": true,
+    "vehicleRegistrationNumber": "BMW-530i",
+    "features": ["Luxury Interior", "Heated Steering Wheel", "Parking Assist"],
+    "description": "A premium luxury sedan with sporty performance.",
+    "bookingCount": 3,
+    "imageUrl": "https://i.postimg.cc/CxPcxPtZ/BMW-5-Series.avif",
+    "location": "Miami"
+  },
+  {
+    "carModel": "Jeep Wrangler Rubicon",
+    "dailyRentalPrice": 95,
+    "availability": true,
+    "vehicleRegistrationNumber": "JEEP-RUBI",
+    "features": ["Off-Road Tires", "Removable Doors", "Winch", "4WD"],
+    "description": "The ultimate off-road adventure vehicle.",
+    "bookingCount": 7,
+    "imageUrl": "https://i.postimg.cc/t4CryQrQ/Jeep-Wrangler-Rubicon.avif",
+    "location": "Colorado"
+  },
+  {
+    "carModel": "Honda Accord Hybrid",
+    "dailyRentalPrice": 60,
+    "availability": true,
+    "vehicleRegistrationNumber": "HND-HYB23",
+    "features": ["Hybrid Engine", "Lane Assist", "Wireless Charging"],
+    "description": "A fuel-efficient hybrid with a spacious interior.",
+    "bookingCount": 4,
+    "imageUrl": "https://i.postimg.cc/zvCdDJZ5/Honda-Accord-Hybrid.avif",
+    "location": "Seattle"
+  },
+  {
+    "carModel": "Porsche 911 Carrera",
+    "dailyRentalPrice": 250,
+    "availability": false,
+    "vehicleRegistrationNumber": "POR-911C",
+    "features": ["Sport Mode", "Premium Leather", "Rear-Wheel Drive"],
+    "description": "An iconic sports car for adrenaline seekers.",
+    "bookingCount": 15,
+    "imageUrl": "https://i.postimg.cc/3JhSSDmw/Porsche-911-Carrera.avif",
+    "location": "Las Vegas"
+  },
+  {
+    "carModel": "Hyundai Tucson",
+    "dailyRentalPrice": 55,
+    "availability": true,
+    "vehicleRegistrationNumber": "HYD-TUC23",
+    "features": ["Sunroof", "Smart Cruise Control", "360° Camera"],
+    "description": "A versatile SUV with modern tech features.",
+    "bookingCount": 6,
+    "imageUrl": "https://i.postimg.cc/mZCpyScq/Hyundai-Tucson.avif",
+    "location": "Chicago"
+  },
+  {
+    "carModel": "Chevrolet Suburban",
+    "dailyRentalPrice": 130,
+    "availability": true,
+    "vehicleRegistrationNumber": "CHEV-SUBXL",
+    "features": ["3rd Row Seating", "DVD Entertainment", "Heated/Cooled Seats"],
+    "description": "A massive SUV perfect for large families or groups.",
+    "bookingCount": 9,
+    "imageUrl": "https://i.postimg.cc/sxd6RMLw/Chevrolet-Suburban.avif",
+    "location": "Orlando"
+  },
+  {
+    "carModel": "Nissan Altima",
+    "dailyRentalPrice": 45,
+    "availability": true,
+    "vehicleRegistrationNumber": "NIS-ALT22",
+    "features": ["ProPilot Assist", "Bose Audio", "Dual-Zone AC"],
+    "description": "A reliable midsize sedan with great fuel economy.",
+    "bookingCount": 2,
+    "imageUrl": "https://i.postimg.cc/SszT56gn/Nissan-Altima.avif",
+    "location": "Boston"
+  }
+]
