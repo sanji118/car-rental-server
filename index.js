@@ -1,24 +1,37 @@
 const express = require('express')
 const cors = require('cors');
 const jwt = require("jsonwebtoken")
-const cookieParsar = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const app = express();
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 
-
+app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:5174'],
+    origin: ['http://localhost:5173'],
     credentials: true
 }));
 app.use(express.json());
 
 
+
+const logger = (req, res, next) =>{
+    console.log('inside the logger');
+    next();
+}
+
 const verifyJWT = (req, res, next)=>{
     const token = req.cookies?.token;
+    console.log("token recieved", token)
+    if (!token) {
+        return res.status(401).send({ message: 'Unauthorized No token' });
+    }
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded)=>{
+        if (err) {
+            return res.status(401).send({ message: 'Unauthorized  Invalid token' });
+        }
         req.user = decoded;
         next();
     })
@@ -57,23 +70,42 @@ async function run() {
     //auth related APIs
     app.post('/jwt', async(req, res)=>{
         const user = req.body;
-        const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const token = jwt.sign({ userEmail: user.email }, process.env.JWT_SECRET, {expiresIn: '1d'});
         res.cookie('token', token,{
             httpOnly: true,
             secure: false,
+            sameSite: 'lax'
         })
-        .send({sucess: true});
-        console.log('success');
+        .send({sucess: true, token});
     })
 
-    //GET data
-    app.get('/cars', async(req, res)=>{
-        const allCars = await carsCollection.find().toArray();
-        res.send(allCars);
-    })
+    //GET data car related
+    app.get('/cars', async (req, res) => {
+        try {
+            const { userEmail } = req.query;
+            let filter = {};
+            if (userEmail) {
+            filter.userEmail = userEmail;
+            }
+            const cars = await carsCollection.find(filter).toArray();
+            res.json(cars);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Server error' });
+        }
+    });
 
-    app.post('/cars', async(req, res)=>{
+
+    app.get('/my-cars', verifyJWT, async (req, res) => {
+        const userEmail = req.user.userEmail;
+        const userCars = await carsCollection.find({ userEmail }).toArray();
+        res.send(userCars);
+    });
+
+    app.post('/cars', verifyJWT, async(req, res)=>{
         const newCar = req.body;
+        newCar.userEmail = req.user.userEmail;
+        newCar.date = new Date();
         const result = await carsCollection.insertOne(newCar);
         res.send(result);
     })
@@ -128,11 +160,16 @@ async function run() {
 
 
     //Booking car
-    app.get('/my-booking',verifyJWT, async(req, res)=>{
-        const email = req.user.email;
-        const allBooking = await bookingCollection.find({userEmail: email}).toArray();
-        res.send(allBooking);
-    })
+    app.get('/my-booking', verifyJWT, async (req, res) => {
+        const userEmail = req.user.userEmail;
+        try {
+            const allBooking = await bookingCollection.find({ userEmail }).toArray();
+            res.send(allBooking);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send({ error: "Failed to fetch bookings" });
+        }
+    });
 
 
     app.patch('/my-booking/:id', async (req, res) => {
@@ -140,9 +177,13 @@ async function run() {
         const { id } = req.params;
 
         try {
-            const result = await Booking.updateOne(
-            { _id: id },
-            { $set: { startDate, endDate } }
+            const result = await bookingCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { 
+                startDate: new Date(startDate), 
+                endDate: new Date(endDate) 
+                } 
+            }
             );
             res.send({ success: true, result });
         } catch (err) {
@@ -150,13 +191,45 @@ async function run() {
         }
     });
 
+    app.patch('/my-booking/:id/cancel', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const updateDoc = {
+            $set: {
+                status: 'cancelled'
+            }
+        }
+        const result = await bookingCollection.updateOne(filter, updateDoc);
+        res.send({ success: true, result });
+        
+    });
+
+
+
 
     app.post('/my-booking',verifyJWT, async (req, res) => {
         const newBooking = req.body;
-        newBooking.userEmail = req.user.email;
+        newBooking.userEmail = req.user.userEmail;
+        newBooking.bookingCount = 1;
         const result = await bookingCollection.insertOne(newBooking);
         res.send(result);
     });
+    app.put('/my-booking/:id/increment', async (req, res) => {
+        const id = req.params.id;
+        const result = await bookingCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $inc: { bookingCount: 1 } }
+        );
+        res.send(result);
+    });
+
+    app.delete('/my-booking/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await bookingCollection.deleteOne(query);
+        res.send(result) ;
+    });
+    
 
 
     //auth logout
