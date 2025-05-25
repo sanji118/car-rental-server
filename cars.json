@@ -8,7 +8,8 @@
     "description": "A sleek and fuel-efficient sedan with advanced safety features.",
     "bookingCount": 5,
     "imageUrl": "https://i.postimg.cc/wB10y58w/toyota.avif",
-    "location": "New York"
+    "location": "New York",
+    "date": "2023-06-20T00:00:00.000Z"
   },
   {
     "carModel": "Tesla Model Y",
@@ -19,7 +20,8 @@
     "description": "A futuristic electric SUV with cutting-edge technology.",
     "bookingCount": 12,
     "imageUrl": "https://i.postimg.cc/TPBQryTf/black-mini-coupe-road-114579-5056.avif",
-    "location": "San Francisco"
+    "location": "San Francisco",
+    "date": "2023-05-18T00:00:00.000Z"
   },
   {
     "carModel": "Ford F-150",
@@ -27,10 +29,11 @@
     "availability": false,
     "vehicleRegistrationNumber": "FRD-150X",
     "features": ["4WD", "Towing Package", "Heated Seats", "Apple CarPlay"],
-    "description": "America’s best-selling pickup truck, built for power and utility.",
+    "description": "America's best-selling pickup truck, built for power and utility.",
     "bookingCount": 8,
     "imageUrl": "https://i.postimg.cc/CL4vWLss/Ford-F-150.avif",
-    "location": "Texas"
+    "location": "Texas",
+    "date": "2023-04-15T00:00:00.000Z"
   },
   {
     "carModel": "BMW 5 Series",
@@ -41,7 +44,8 @@
     "description": "A premium luxury sedan with sporty performance.",
     "bookingCount": 3,
     "imageUrl": "https://i.postimg.cc/CxPcxPtZ/BMW-5-Series.avif",
-    "location": "Miami"
+    "location": "Miami",
+    "date": "2023-07-10T00:00:00.000Z"
   },
   {
     "carModel": "Jeep Wrangler Rubicon",
@@ -52,7 +56,8 @@
     "description": "The ultimate off-road adventure vehicle.",
     "bookingCount": 7,
     "imageUrl": "https://i.postimg.cc/t4CryQrQ/Jeep-Wrangler-Rubicon.avif",
-    "location": "Colorado"
+    "location": "Colorado",
+    "date": "2023-03-22T00:00:00.000Z"
   },
   {
     "carModel": "Honda Accord Hybrid",
@@ -63,7 +68,8 @@
     "description": "A fuel-efficient hybrid with a spacious interior.",
     "bookingCount": 4,
     "imageUrl": "https://i.postimg.cc/zvCdDJZ5/Honda-Accord-Hybrid.avif",
-    "location": "Seattle"
+    "location": "Seattle",
+    "date": "2023-08-05T00:00:00.000Z"
   },
   {
     "carModel": "Porsche 911 Carrera",
@@ -74,7 +80,8 @@
     "description": "An iconic sports car for adrenaline seekers.",
     "bookingCount": 15,
     "imageUrl": "https://i.postimg.cc/3JhSSDmw/Porsche-911-Carrera.avif",
-    "location": "Las Vegas"
+    "location": "Las Vegas",
+    "date": "2023-01-30T00:00:00.000Z"
   },
   {
     "carModel": "Hyundai Tucson",
@@ -85,7 +92,8 @@
     "description": "A versatile SUV with modern tech features.",
     "bookingCount": 6,
     "imageUrl": "https://i.postimg.cc/mZCpyScq/Hyundai-Tucson.avif",
-    "location": "Chicago"
+    "location": "Chicago",
+    "date": "2023-09-12T00:00:00.000Z"
   },
   {
     "carModel": "Chevrolet Suburban",
@@ -96,7 +104,8 @@
     "description": "A massive SUV perfect for large families or groups.",
     "bookingCount": 9,
     "imageUrl": "https://i.postimg.cc/sxd6RMLw/Chevrolet-Suburban.avif",
-    "location": "Orlando"
+    "location": "Orlando",
+    "date": "2023-02-14T00:00:00.000Z"
   },
   {
     "carModel": "Nissan Altima",
@@ -107,6 +116,7 @@
     "description": "A reliable midsize sedan with great fuel economy.",
     "bookingCount": 2,
     "imageUrl": "https://i.postimg.cc/SszT56gn/Nissan-Altima.avif",
-    "location": "Boston"
+    "location": "Boston",
+    "date": "2023-10-08T00:00:00.000Z"
   }
 ]

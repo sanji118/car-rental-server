@@ -9,10 +9,7 @@ const port = process.env.PORT || 5000;
 
 
 
-app.use(cors({
-    origin: ['http://localhost:5000'],
-    credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 
@@ -40,7 +37,11 @@ async function run() {
     
 
     const carsCollection = client.db('carRental').collection('cars');
+    await carsCollection.deleteMany({})
     await carsCollection.insertMany(cars)
+
+
+    //GET data
     app.get('/cars', async(req, res)=>{
         const allCars = await carsCollection.find().toArray();
         res.send(allCars);
@@ -57,7 +58,49 @@ async function run() {
         const result = await carsCollection.findOne(query);
         res.json(result);
     })
-    
+
+    // Recently Added
+    app.get('/recently-added', async(req, res)=>{
+        const result = await carsCollection
+        .find({})
+        .sort({date: -1})
+        .limit(6)
+        .toArray()
+        res.send(result)
+    })
+    // PUT: Update car by ID
+    app.put('/cars/:id', async (req, res) => {
+        const id = req.params.id;
+        const updatedData = req.body;
+        const filter = { _id: new ObjectId(id) };
+        const updateDoc = {
+            $set: {
+            carModel: updatedData.carModel,
+            dailyRentalPrice: updatedData.dailyRentalPrice,
+            availability: updatedData.availability,
+            vehicleRegistrationNumber: updatedData.vehicleRegistrationNumber,
+            features: updatedData.features,
+            description: updatedData.description,
+            imageUrl: updatedData.imageUrl,
+            location: updatedData.location,
+            }
+        };
+
+        const result = await carsCollection.updateOne(filter, updateDoc);
+        const updatedCar = await carsCollection.findOne(filter);
+        res.send(updatedCar);
+    });
+
+
+    // DELETE: Delete car by ID
+    app.delete('/cars/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+
+        const result = await carsCollection.deleteOne(query);
+        res.send(result) ;
+    });
+
 
 
   } finally {
