@@ -37,6 +37,7 @@ async function run() {
     
 
     const carsCollection = client.db('carRental').collection('cars');
+    const bookingCollection = client.db('carRental').collection('myBooking');
     await carsCollection.deleteMany({})
     await carsCollection.insertMany(cars)
 
@@ -101,6 +102,23 @@ async function run() {
         res.send(result) ;
     });
 
+    //Booking car
+    app.get('/my-booking', async(req, res)=>{
+        const allBooking = await bookingCollection.find().toArray();
+        res.send(allBooking);
+    })
+
+    app.post('/my-booking', async(req, res)=>{
+        const newBooking = req.body;
+        const result = await bookingCollection.insertOne(newBooking);
+        res.send(result);
+    })
+    app.get('/my-booking/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await bookingCollection.findOne(query);
+        res.json(result);
+    })
 
 
   } finally {
