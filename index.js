@@ -9,8 +9,20 @@ const port = process.env.PORT || 5000;
 
 
 
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5174'],
+    credentials: true
+}));
 app.use(express.json());
+
+
+const verifyJWT = (req, res, next)=>{
+    const token = req.cookies?.token;
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded)=>{
+        req.user = decoded;
+        next();
+    })
+}
 
 
 
@@ -41,6 +53,18 @@ async function run() {
     await carsCollection.deleteMany({})
     await carsCollection.insertMany(cars)
 
+
+    //auth related APIs
+    app.post('/jwt', async(req, res)=>{
+        const user = req.body;
+        const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '1d'});
+        res.cookie('token', token,{
+            httpOnly: true,
+            secure: false,
+        })
+        .send({sucess: true});
+        console.log('success');
+    })
 
     //GET data
     app.get('/cars', async(req, res)=>{
@@ -102,23 +126,48 @@ async function run() {
         res.send(result) ;
     });
 
+
     //Booking car
-    app.get('/my-booking', async(req, res)=>{
-        const allBooking = await bookingCollection.find().toArray();
+    app.get('/my-booking',verifyJWT, async(req, res)=>{
+        const email = req.user.email;
+        const allBooking = await bookingCollection.find({userEmail: email}).toArray();
         res.send(allBooking);
     })
 
-    app.post('/my-booking', async(req, res)=>{
+
+    app.patch('/my-booking/:id', async (req, res) => {
+        const { startDate, endDate } = req.body;
+        const { id } = req.params;
+
+        try {
+            const result = await Booking.updateOne(
+            { _id: id },
+            { $set: { startDate, endDate } }
+            );
+            res.send({ success: true, result });
+        } catch (err) {
+            res.status(500).send({ success: false, error: err.message });
+        }
+    });
+
+
+    app.post('/my-booking',verifyJWT, async (req, res) => {
         const newBooking = req.body;
+        newBooking.userEmail = req.user.email;
         const result = await bookingCollection.insertOne(newBooking);
         res.send(result);
+    });
+
+
+    //auth logout
+    app.post('/logout', (req, res)=>{
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        }).send({success: true})
     })
-    app.get('/my-booking/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await bookingCollection.findOne(query);
-        res.json(result);
-    })
+
 
 
   } finally {
