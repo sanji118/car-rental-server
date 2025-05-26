@@ -18,13 +18,13 @@ app.use(express.json());
 
 
 const logger = (req, res, next) =>{
-    console.log('inside the logger');
+    //console.log('inside the logger');
     next();
 }
 
 const verifyJWT = (req, res, next)=>{
     const token = req.cookies?.token;
-    console.log("token recieved", token)
+    //console.log("token recieved", token)
     if (!token) {
         return res.status(401).send({ message: 'Unauthorized No token' });
     }
@@ -56,15 +56,15 @@ const client = new MongoClient(uri, {
 });
 async function run() {
   try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    //await client.connect();
+    //await client.db("admin").command({ ping: 1 });
+    //console.log("Pinged your deployment. You successfully connected to MongoDB!");
     
 
     const carsCollection = client.db('carRental').collection('cars');
     const bookingCollection = client.db('carRental').collection('myBooking');
-    await carsCollection.deleteMany({})
-    await carsCollection.insertMany(cars)
+    //await carsCollection.deleteMany({})
+    //await carsCollection.insertMany(cars)
 
 
     //auth related APIs
@@ -90,7 +90,7 @@ async function run() {
             const cars = await carsCollection.find(filter).toArray();
             res.json(cars);
         } catch (err) {
-            console.error(err);
+            //console.error(err);
             res.status(500).json({ message: 'Server error' });
         }
     });
@@ -166,7 +166,7 @@ async function run() {
             const allBooking = await bookingCollection.find({ userEmail }).toArray();
             res.send(allBooking);
         } catch (err) {
-            console.error(err);
+            //console.error(err);
             res.status(500).send({ error: "Failed to fetch bookings" });
         }
     });
