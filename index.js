@@ -10,7 +10,11 @@ const port = process.env.PORT || 5000;
 
 app.use(cookieParser());
 app.use(cors({
-    origin: ['https://drive-rental-ca07b.web.app'],
+    origin: [
+        'http://localhost:5174',
+        'https://drive-rental-ca07b.web.app',
+        'https://drive-rental-ca07b.firebaseapp.com'
+    ],
     credentials: true
 }));
 app.use(express.json());
@@ -24,7 +28,7 @@ const logger = (req, res, next) =>{
 
 const verifyJWT = (req, res, next)=>{
     const token = req.cookies?.token;
-    //console.log("token recieved", token)
+    console.log("token recieved", token)
     if (!token) {
         return res.status(401).send({ message: 'Unauthorized No token' });
     }
@@ -69,20 +73,28 @@ async function run() {
 
     //auth related APIs
     app.post('/jwt', async(req, res)=>{
-        const user = req.body;
-        const token = jwt.sign({ userEmail: user.email }, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const { email } = req.body;
+        const token = jwt.sign({ userEmail: email }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
         res.cookie('token', token,{
-            httpOnly: true,
-            secure: false,
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'lax'
+             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
         })
         .send({sucess: true, token});
     })
+    app.post('/logout', (req, res) => {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+        }).send({ success: true });
+    });
 
     //GET data car related
     app.get('/cars', async (req, res) => {
         try {
-            const { userEmail } = req.query;
+            const userEmail = req.user.userEmail;
             let filter = {};
             if (userEmail) {
             filter.userEmail = userEmail;
@@ -172,7 +184,7 @@ async function run() {
     });
 
 
-    app.patch('/my-booking/:id', async (req, res) => {
+    app.patch('/my-booking/:id',verifyJWT, async (req, res) => {
         const { startDate, endDate } = req.body;
         const { id } = req.params;
 
@@ -191,7 +203,7 @@ async function run() {
         }
     });
 
-    app.patch('/my-booking/:id/cancel', async (req, res) => {
+    app.patch('/my-booking/:id/cancel',verifyJWT, async (req, res) => {
         const id = req.params.id;
         const filter = { _id: new ObjectId(id) };
         const updateDoc = {
@@ -223,23 +235,13 @@ async function run() {
         res.send(result);
     });
 
-    app.delete('/my-booking/:id', async (req, res) => {
+    app.delete('/my-booking/:id',verifyJWT, async (req, res) => {
         const id = req.params.id;
         const query = { _id: new ObjectId(id) };
         const result = await bookingCollection.deleteOne(query);
         res.send(result) ;
     });
     
-
-
-    //auth logout
-    app.post('/logout', (req, res)=>{
-        res.clearCookie('token', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
-        }).send({success: true})
-    })
 
 
 
@@ -263,3 +265,4 @@ app.get('/', (req, res) =>{
 app.listen(port, ()=>{
     console.log(`server is running on port : ${port}`)
 })
+
