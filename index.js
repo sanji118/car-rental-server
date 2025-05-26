@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: ['https://drive-rental-ca07b.web.app'],
     credentials: true
 }));
 app.use(express.json());
@@ -74,7 +74,7 @@ async function run() {
         res.cookie('token', token,{
             httpOnly: true,
             secure: false,
-            sameSite: 'lax'
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'lax'
         })
         .send({sucess: true, token});
     })
