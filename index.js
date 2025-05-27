@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(cookieParser());
 app.use(cors({
     origin: [
-        'http://localhost:5174',
+        'http://localhost:5173',
         'https://drive-rental-ca07b.web.app',
         'https://drive-rental-ca07b.firebaseapp.com'
     ],
